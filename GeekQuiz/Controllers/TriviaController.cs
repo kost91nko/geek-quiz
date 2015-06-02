@@ -13,6 +13,7 @@ using GeekQuiz.Models;
 
 namespace GeekQuiz.Controllers
 {
+    [Authorize]
     public class TriviaController : ApiController
     {
        private TriviaContext db = new TriviaContext();
@@ -30,6 +31,20 @@ namespace GeekQuiz.Controllers
           }
 
           return this.Ok(nextQuestion);
+       }
+        
+       [ResponseType(typeof(TriviaAnswer))]
+       public async Task<IHttpActionResult> Post(TriviaAnswer answer)
+       {
+           if (!ModelState.IsValid)
+           {
+               return this.BadRequest(this.ModelState);
+           }
+
+           answer.UserId = User.Identity.Name;
+
+           var isCorrect = await this.StoreAsync(answer);
+           return this.Ok<bool>(isCorrect);
        }
 
        protected override void Dispose(bool disposing)
