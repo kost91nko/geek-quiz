@@ -15,7 +15,8 @@ namespace GeekQuiz
 
             // Use camel case for JSON data
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            
             // Web API routes
             config.MapHttpAttributeRoutes();
 
